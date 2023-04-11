@@ -1,3 +1,6 @@
+#ifndef TRUEFONTTYPES_H
+#define TRUEFONTTYPES_H
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -177,7 +180,7 @@ struct hhea
 
 struct hmtx
 {
-    uint16_t hMetrics; //= (uint16_t*)calloc(sizeof(uint16_t), (*numOfLongHorMetric));
+    uint16_t *hMetrics; //= (uint16_t*)calloc(sizeof(uint16_t), (*numOfLongHorMetric));
     FWord leftSideBearing;
 };
 
@@ -196,7 +199,7 @@ struct maxp
     uint16_t maxComponentContours;
     uint16_t maxZones;
     uint16_t *maxTwilightPoints;
-    uint32_t *maxStorage;
+    uint16_t maxStorage;
     uint16_t maxFunctionDefs;
     uint16_t maxInstructionDefs;
     uint32_t *Stack;
@@ -290,3 +293,4 @@ uint32_t VerifyChecksum(uint32_t **Table, uint32_t *length)
     }
     return result;
 }
+#endif

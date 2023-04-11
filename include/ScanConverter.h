@@ -1,3 +1,6 @@
+#ifndef SCANCONVERTER_H
+#define SCANCONVERTER_H
+
 #include <FontData/FontTableSetup.h>
 #include <stdbool.h>
 #include <math.h>
@@ -156,3 +159,4 @@ static F2Dot14 DropoutControl(struct InstructionKit *MemoryLocations, struct gly
 
     }
 }
+#endif
