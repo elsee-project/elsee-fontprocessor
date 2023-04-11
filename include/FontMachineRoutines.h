@@ -1,11 +1,20 @@
+
+#ifndef FONTMACHINEROUTINES_H
+#define FONTMACHINEROUTINES_H
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <FontEngineInit.h>
+#include <FontData/FontTableSetup.h>
 
 uint8_t *point_8;
 uint16_t *point_16;
+
+void PointRound(F2Dot14 Points);
+
+
 
 uint8_t SimpleGlyphProcess(struct glyf *glyftable, struct InstructionKit *MemoryLocations, uint32_t *point)
 {
@@ -17,7 +26,7 @@ uint8_t SimpleGlyphProcess(struct glyf *glyftable, struct InstructionKit *Memory
         }
         if (*(*glyftable).flags & 2 == 1)
         {
-            *point_8 = (uint8_t*)*(*glyftable).xCoordinates;
+            point_8 = (uint8_t*)(*glyftable).xCoordinates;
             (*MemoryLocations).OriginalPoints[0][*point] = (float)*point_8 * MemoryLocations -> PixelSize;
             if (*(*glyftable).flags & 16 == 0)
             {
@@ -26,7 +35,7 @@ uint8_t SimpleGlyphProcess(struct glyf *glyftable, struct InstructionKit *Memory
         }
         else
         {
-            *point_16 = (uint16_t*)*(*glyftable).xCoordinates;
+            point_16 = (uint16_t*)(*glyftable).xCoordinates;
             (*MemoryLocations).OriginalPoints[0][*point] = (float)*point_16 * MemoryLocations -> PixelSize;
             if (*(*glyftable).flags & 16 == 1)
             {
@@ -39,7 +48,7 @@ uint8_t SimpleGlyphProcess(struct glyf *glyftable, struct InstructionKit *Memory
         }
         if (*(*glyftable).flags & 4 == 0)
         {
-            *point_8 = (uint8_t*)*(*glyftable).yCoordinates;
+            point_8 = (uint8_t*)(*glyftable).yCoordinates;
             (*MemoryLocations).OriginalPoints[1][*point] = (float)*point_8 * MemoryLocations -> PixelSize;
             if (*(*glyftable).flags & 16 == 0)
             if (*(*glyftable).flags & 32 == 0)
@@ -49,7 +58,7 @@ uint8_t SimpleGlyphProcess(struct glyf *glyftable, struct InstructionKit *Memory
         }
         else
         {
-            *point_16 = (uint16_t*)*(*glyftable).yCoordinates;
+            point_16 = (uint16_t*)(*glyftable).yCoordinates;
             (*MemoryLocations).OriginalPoints[1][*point] = (float)*point_16 * MemoryLocations -> PixelSize;
             if (*(*glyftable).flags & 32 == 1)
             {
@@ -69,30 +78,35 @@ uint8_t SimpleGlyphProcess(struct glyf *glyftable, struct InstructionKit *Memory
     }
 }
 
-struct glyf *ComplexGlyphProcess(struct glyf *glyftable, struct InstructionKit *MemoryLocations, uint32_t *point)
-{
+struct glyf *ComplexGlyphProcess(struct glyf *glyftable, struct InstructionKit *MemoryLocations, uint32_t *point, void *AddrSetPoints)
+{   
+    /*This function, ComplexGlyphProcess, is part of a recursive function which is defined beneath it.
+     ComplexGlyphProcess uses the called function as Complex Glyphs are made up of multiple component glyphs 
+     which are essentially defined in the same format as simple glyphs unless made up of other component glyphs. 
+     As such, each component should be processed as a glyf you'd define through the cmap */
+    void (*setPoints)(struct glyf *glyftable,  struct InstructionKit *MemoryLocations) = AddrSetPoints;  // Sets address for calling function
     glyftable -> componentflags;
     uint16_t *Transformation;
     Transformation = glyftable -> transformation;
     while (*glyftable -> componentflags &  32 != 0)
     {
     struct glyf *componentglyf = glyfsetup(componentglyf, MemoryLocations, MemoryLocations -> loca->offsets[(*glyftable).glyphIndex]); // Double Check, it should add the Glyph Entry to the Offset and the Entry
-    setPoints(componentglyf,  MemoryLocations);
+    setPoints(componentglyf,  MemoryLocations); //Calls the calling function
         if (*(*glyftable).flags & 1 == 1)
         {
             if (*(*glyftable).flags &  2 == 2)
-            {uint8_t *point_8 = (uint8_t*)*(*glyftable).xCoordinates;
+            {uint8_t *point_8 = (uint8_t*)(*glyftable).xCoordinates;
             ((*MemoryLocations).GlyphZone[0][*point]) =  (float)*point_8;
             ((*MemoryLocations).GlyphZone[1][*point]) =  (float)*(point_8 +1);
                 if (*(*glyftable).flags &  4 == 1)
                 {
-                    round((*MemoryLocations).GlyphZone[*point][*point]);
+                    PointRound((*MemoryLocations).GlyphZone[*point][*point]);
                 }
             }
         }
         else
         {
-            uint16_t *point_16 = (uint16_t*)*(*glyftable).xCoordinates;
+            uint16_t *point_16 = (uint16_t*)(*glyftable).xCoordinates;
             (*glyftable).arg2 += 2;
             if (*(*glyftable).flags &  2 == 2)
             {
@@ -100,7 +114,7 @@ struct glyf *ComplexGlyphProcess(struct glyf *glyftable, struct InstructionKit *
                 ((*MemoryLocations).GlyphZone[1][*point]) =  (float)*(point_16 +2);
                 if (*(*glyftable).flags &  4 == 1)
                 {
-                    round((*MemoryLocations).GlyphZone[*point][*point]);
+                    PointRound((*MemoryLocations).GlyphZone[*point][*point]);
                 }
             }
         }
@@ -144,68 +158,27 @@ struct glyf *ComplexGlyphProcess(struct glyf *glyftable, struct InstructionKit *
             *point_8 = (uint8_t)*(*glyftable).yCoordinates;
             (*MemoryLocations).OriginalPoints[1][*point] = (float)*point_8 * MemoryLocations -> PixelSize;
         }
-
         }
-}
-
-
-uint16_t *searchglyph(uint32_t *character, struct cmap *cmap, struct InstructionKit *EngineInit)
-{
-    int i = 0;
-    uint16_t glyphindex;
-    if (*cmap -> format == 6)
-    {
-        uint16_t *segcount = (uint16_t*)(*cmap).format + 3;
-        uint16_t *endCode =  (uint16_t*)(*cmap).format + 8;
-        uint16_t *startCode = endCode + *segcount + 1;
-        uint16_t *idDelta = startCode + *segcount;
-        uint16_t *idRangeOffset = idDelta + *segcount;
-        while((startCode[i] < *character && endCode[i] > *character ) || endCode[i] == 65355)   //0xFFFFh is the last value in the search and maps to null
-        {
-            i++;
-        }
-        if (endCode[i] != 65355)
-            {
-            glyphindex = *(&idRangeOffset[i] + (idRangeOffset[i]/2) + (*character -startCode[i]));
-            }
-            glyphindex = idDelta[i] + glyphindex;
-
-        if(*character == 255)
-            {
-            segcount = 0;
-            endCode = 0;
-            startCode = 0;
-            idRangeOffset = 0;
-            glyphindex = 0;
-            free(segcount);
-            free(endCode);
-            free(startCode);
-            free(idRangeOffset);
-            }
-    }
-    return (uint16_t*)EngineInit -> GlyphEntry + EngineInit-> loca->offsets[glyphindex];
 }
 
 void setPoints(struct glyf *glyftable,  struct InstructionKit *MemoryLocations)
 {
-    uint8_t MoreGlyphs = 1;  //Boolean
+    bool GlyphsToDo = 1;  //Flag that determines whether there's glyphs to process
     uint32_t *point = (uint32_t*)(*MemoryLocations).OriginalPoints + sizeof((*MemoryLocations).OriginalPoints);
     MemoryLocations -> GlyphSets[*point];
-    while (MoreGlyphs != 0)
+    while (GlyphsToDo != 0) 
     {
         uint8_t *ComponentPointer;
         glyftable->flags;
         int totalpoints; //Remove
-        if (numberOfContours  <= 0)
+        if (numberOfContours >= 0)
         {
-            MoreGlyphs = 0;
+            GlyphsToDo = 0;
             SimpleGlyphProcess(glyftable, MemoryLocations, point);
         }
         else
         {
-            struct glyf *componentglyf = ComplexGlyphProcess(glyftable, MemoryLocations, point);
-            //This will add the simple glyph to the list of instructions ot execute
-            setPoints(componentglyf,  MemoryLocations);
+            struct glyf *componentglyf = ComplexGlyphProcess(glyftable, MemoryLocations, point, &setPoints);
         }
     }
     for(int i = 0 ; i < *point; i++)
@@ -219,10 +192,6 @@ void setPoints(struct glyf *glyftable,  struct InstructionKit *MemoryLocations)
     Rotate 1 is 90 Rotate 2 is 180 Rotate 3 is 270
     if Stretched, signed. if zero, no stretch, if positive, the number is the magnittude of strentching in terms of x value
     if y the magnitude is in terms of y value
-
-
-
-
     */
-
 }
+#endif
