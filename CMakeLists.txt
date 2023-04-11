@@ -4,11 +4,12 @@ set(FONTPROCINC include)
 set(HEADERS
 ${FONTPROCINC}/FontEngineInit.h
 ${FONTPROCINC}/FontMachineRoutines.h
-${FONTPROCINC}/ProgramSetup.h
 ${FONTPROCINC}/ScanConverter.h
 ${FONTPROCINC}/FontData/cmap.h
 ${FONTPROCINC}/FontData/FontTableSetup.h
-${FONTPROCINC}/FontData/TrueFontTypes.h)
+${FONTPROCINC}/FontData/TrueFontTypes.h
+Instructions/InstructionGroups/Core.h
+)
 
 add_library(Instructions STATIC Instructions/Instructions.c
 Instructions/InstructionGroups/FunctionGroupZero.c
@@ -26,5 +27,6 @@ ${HEADERS})
 target_include_directories(Instructions PRIVATE ${FONTPROCINC})
 add_library(FontProcessor STATIC fontprocesssor.c ${HEADERS})
 target_include_directories(FontProcessor PRIVATE ${FONTPROCINC})
+target_include_directories(FontProcessor PRIVATE Instructions/InstructionGroups/)
 target_link_libraries(FontProcessor Instructions)
 target_link_libraries(Instructions FontProcessor)
