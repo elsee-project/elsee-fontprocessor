@@ -1,3 +1,5 @@
+#ifndef FONTENGINEINIT_H
+#define FONTENGINEINIT_H
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -39,7 +41,7 @@ struct InstructionKit *InitializeMemoryLocations(struct maxp *maxp, struct head 
     //*(*instance).MasterGrid = (F2Dot14)(PointSize * dpi)/(72 * head->unitsPerEm);
     (*instance).Stack = (uint32_t*)calloc((uint16_t)*(maxp->Stack), sizeof(uint16_t));
     (*instance).StackPointer = (*instance).Stack;
-    (*instance).Storage =  (uint32_t*)calloc((uint16_t)*(maxp->maxStorage), sizeof(uint16_t));
+    (*instance).Storage =  (uint32_t*)calloc((uint16_t)(maxp->maxStorage), sizeof(uint16_t));
     (*instance).OriginalPoints = (F2Dot14(*)[2])calloc(sizeof(F2Dot14(*)[2]), (uint16_t)*(maxp ->maxComponentPoints));
     (*instance).GlyphZone = (F2Dot14(*)[2])calloc(sizeof(F2Dot14(*)[2]), (uint16_t)*(maxp ->maxComponentPoints));
     (*instance).TwilightZone =  (F2Dot14(*)[2])calloc(sizeof(F2Dot14(*)[2]), (uint16_t)*(maxp -> maxTwilightPoints));
@@ -58,3 +60,4 @@ struct InstructionKit *InitializeMemoryLocations(struct maxp *maxp, struct head 
     (*instance).htmx;
     return instance;
 }
+#endif
