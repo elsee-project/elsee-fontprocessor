@@ -1,5 +1,6 @@
 #include  "Core.h"
 
+
 static inline uint32_t IUP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
         uint32_t TouchedPointA = 0;
@@ -120,9 +121,9 @@ static inline uint32_t IP(struct InstructionKit *MemoryLocations, struct Graphic
         F2Dot14  OrigDisRPY = ((MemoryLocations -> OriginalPoints[1][rp[1]]) - (MemoryLocations -> OriginalPoints[1][rp[2]]));
         F2Dot14 OrigDisP[2];
         OrigDisP[0] = ((MemoryLocations -> OriginalPoints[0][rp[1]]) - (MemoryLocations -> OriginalPoints[0][*MemoryLocations -> StackPointer]));
-        POP(*MemoryLocations -> StackPointer);
+        POP(MemoryLocations -> StackPointer);
         OrigDisP[1] = ((MemoryLocations -> OriginalPoints[1][rp[1]]) - (MemoryLocations -> OriginalPoints[1][*MemoryLocations -> StackPointer]));
-        POP(*MemoryLocations -> StackPointer);
+        POP(MemoryLocations -> StackPointer);
         uint32_t RelDisRP [2] = {(*Point(MemoryLocations,rp[1], zp[0]) - *Point(MemoryLocations,rp[2], zp[1])), (*Point(MemoryLocations,rp[1], zp[0]) - *Point(MemoryLocations,rp[2], zp[1]))};
         uint32_t RatioRP = RelDisRP[0]/OrigDisRPX;
         F2Dot14 *dummy;
@@ -230,13 +231,13 @@ static inline uint32_t ALIGNRP(struct InstructionKit *MemoryLocations, struct Gr
         F2Dot14 distance = Distance(Coord1, Coord2);   //x2 *x1 + y2 +y1
     if (*(MemoryLocations -> StackPointer) > *(MemoryLocations -> StackPointer - 1))
     {
-        FreedomTransform(MemoryLocations -> StackPointer, RuntimeStates -> FreedomVector, distance/2);
-        FreedomTransform((MemoryLocations -> StackPointer - 1), RuntimeStates -> FreedomVector, -distance/2);
+        FreeTransform( RuntimeStates -> FreedomVector, *(MemoryLocations -> StackPointer), distance/2);
+        FreeTransform( RuntimeStates -> FreedomVector, *(MemoryLocations -> StackPointer - 1), -distance/2);
     }
     else
     {
-        FreedomTransform(MemoryLocations -> StackPointer, RuntimeStates -> FreedomVector, -distance/2);
-        FreedomTransform((MemoryLocations -> StackPointer - 1), RuntimeStates -> FreedomVector, distance/2);
+        FreeTransform( RuntimeStates -> FreedomVector, *(MemoryLocations -> StackPointer - 1), -distance/2);
+        FreeTransform( RuntimeStates -> FreedomVector, *(MemoryLocations -> StackPointer), distance/2);
     }
     POP(MemoryLocations -> StackPointer);
 }
@@ -258,14 +259,14 @@ static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *M
       {
             if(*(MemoryLocations -> StackPointer + 2) - *(MemoryLocations -> StackPointer + 1) >  RuntimeStates -> controlvalue_cut_in)
                 {
-                  ROUND((char) NULL, RuntimeStates -> roundState, Coordinates[0]);
-                  ROUND((char) NULL, RuntimeStates -> roundState, Coordinates[1]);
+                  ROUND(-127, RuntimeStates -> roundState, Coordinates[0]);
+                  ROUND(-127, RuntimeStates -> roundState, Coordinates[1]);
                   Coordinates = MoveRelProjFree(Coordinates, RuntimeStates, *(MemoryLocations -> StackPointer + 2));
 
                 }
             else
                 {
-                    ROUND((char) NULL, RuntimeStates -> roundState, (F2Dot14) *(MemoryLocations -> StackPointer + 2));
+                    ROUND(0, RuntimeStates -> roundState, (F2Dot14) *(MemoryLocations -> StackPointer + 2));
                     Coordinates = MoveRelProjFree(Coordinates, RuntimeStates , *(MemoryLocations -> StackPointer + 2));
                 }
       }
@@ -278,7 +279,7 @@ static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *M
 
 static inline F2Dot14 RTDG(uint32_t roundState)
     {
-       roundState = 2;
+       roundState = 5;
        return roundState;
     }
 

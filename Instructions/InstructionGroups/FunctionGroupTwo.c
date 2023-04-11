@@ -1,5 +1,6 @@
 #include  "Core.h"
 
+extern void InstructionExecute(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates);
 
 static inline uint8_t  DUP(uint32_t *StackPointer)
 {
@@ -91,7 +92,7 @@ static inline uint32_t MINDEX(uint32_t *StackPointer)
 static inline uint8_t FDEF(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
 {
   //Stores address of Function defintion
-    MemoryLocations -> FunctionDefs[*MemoryLocations -> StackPointer] = (uint16_t)instructionpointer;
+    MemoryLocations -> FunctionDefs[*MemoryLocations -> StackPointer] = (uint16_t)*instructionpointer;
     while (*instructionpointer != 44)
     {
 
@@ -128,7 +129,7 @@ uint8_t CALL(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations
     POP(MemoryLocations ->StackPointer);
     while (*instructionpointer != 44)
         {
-            executionfunction(instructionpointer, MemoryLocations, RuntimeStates);
+            InstructionExecute(instructionpointer, MemoryLocations, RuntimeStates);
         }
     instructionpointer = dummy;
     free(dummy);
@@ -149,7 +150,7 @@ static inline F2Dot14 MDAP(uint8_t *instructionpointer, struct InstructionKit *M
 {
     if (*instructionpointer == 45)
     {
-      ROUND((char) NULL, RuntimeStates -> roundState, *Point(MemoryLocations, *MemoryLocations -> StackPointer, RuntimeStates -> zp[0]));
+      ROUND(-127, RuntimeStates -> roundState, *Point(MemoryLocations, *MemoryLocations -> StackPointer, RuntimeStates -> zp[0]));
       RuntimeStates -> rp[0]  = *MemoryLocations -> StackPointer;
       RuntimeStates -> rp[1]  = *MemoryLocations -> StackPointer;
       POP(MemoryLocations ->StackPointer);

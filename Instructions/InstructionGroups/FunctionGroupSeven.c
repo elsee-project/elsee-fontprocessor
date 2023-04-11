@@ -88,7 +88,7 @@ static inline uint8_t JumpTrue(uint8_t *instructionpointer, struct InstructionKi
 
 static inline uint32_t ROFF(uint32_t roundState)
 {
-    roundState = 5;
+    roundState = 0;
     return roundState;
 }
 
@@ -100,7 +100,7 @@ static inline uint32_t RUTG(uint32_t roundState)
 
 static inline uint32_t RDTG(uint32_t roundState)
 {
-    roundState = 3;
+    roundState = 1;
     return roundState;
 }
 

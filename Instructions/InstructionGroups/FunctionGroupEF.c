@@ -21,7 +21,7 @@ static inline void MIRP(uint8_t *instructionpointer , struct InstructionKit *Mem
 
     if (*instructionpointer & 3 == 3)
     {
-        ROUND((char) NULL, RuntimeStates -> roundState, (F2Dot14)*MemoryLocations -> StackPointer);
+        ROUND(-127, RuntimeStates -> roundState, (F2Dot14)*MemoryLocations -> StackPointer);
     }
     RuntimeStates -> rp[0] =  RuntimeStates -> rp[1];
     RuntimeStates -> rp[2] =  *(MemoryLocations -> StackPointer);

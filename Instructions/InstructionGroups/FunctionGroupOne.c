@@ -34,13 +34,13 @@ static inline uint32_t sloop(uint32_t loop, uint32_t *StackPointer)
 
 static inline uint32_t RTG (uint32_t roundState)
 {
-    roundState = 1;
+    roundState = 3;
     return roundState;
 }
 
-static inline uint32_t RHTG (uint32_t roundState)
+static inline uint32_t RTHG (uint32_t roundState)
 {
-    roundState = 0;
+    roundState = 2;
     return roundState;
 }
 
@@ -108,7 +108,7 @@ static inline void FunctionGroupOne(uint8_t *instructionpointer , struct Instruc
                     }
                 case 9 :
                     {
-                        RuntimeStates -> roundState = RHTG(RuntimeStates -> roundState);
+                        RuntimeStates -> roundState = RTHG(RuntimeStates -> roundState);
                     }
             }
         }

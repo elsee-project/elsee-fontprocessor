@@ -4,6 +4,7 @@
 #include <math.h>
 #include <FontEngineInit.h>
 
+
 F2Dot14 Coordinates[2];
 
 static inline void POP(uint32_t *StackPointer)
@@ -137,7 +138,12 @@ int StandardRound(float Arg)
 F2Dot14 ROUND(char boolean, uint32_t roundState, F2Dot14 Arg)
 {
 
-    if (boolean < 3)
+    if(boolean == -127) //Exception condition in case boolean not needed
+    {
+        
+    }
+
+    else if (boolean < 3)
     {
         if(boolean == 1)
         {
@@ -179,12 +185,17 @@ F2Dot14 ROUND(char boolean, uint32_t roundState, F2Dot14 Arg)
 
         }
 
-    else if (roundState == 0)    //Round to Grid
+    else if (roundState == 1)       //Round down to Grid
+            {
+                    ft_floor(Arg);
+            }
 
+    else if (roundState == 2)    //Actually have no idea what this is supposed to be
         {
            Arg = PointFiveRound(Arg);
         }
-    else if  (roundState == 1)
+
+    else if  (roundState == 3)  //Round to Grid
         {
             if (StandardRound(Arg) == 1)
                 {
@@ -195,7 +206,13 @@ F2Dot14 ROUND(char boolean, uint32_t roundState, F2Dot14 Arg)
                 ft_floor(Arg);
                 }
         }
-    else if (roundState == 2)   // Round to DG
+
+    else if (roundState == 4)       //Round up to Grid
+            {
+                    ft_ceil(Arg);
+            }
+
+    else if (roundState == 5)   // Round to DG
             {
             if (StandardRound(Arg) == 1)
                 {
@@ -206,15 +223,4 @@ F2Dot14 ROUND(char boolean, uint32_t roundState, F2Dot14 Arg)
                 Arg = ft_floor(Arg) - 1;
                 }
             }
-
-
-    else if (roundState == 3)       //Round down to Grid
-            {
-                    ft_floor(Arg);
-            }
-    else if (roundState == 4)       //Round up to Grid
-            {
-                    ft_ceil(Arg);
-            }
-
 }

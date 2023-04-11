@@ -101,6 +101,7 @@ static inline F2Dot14 *SPVFS(F2Dot14 *ProjectionVector, uint32_t *StackPointer)
     POP(StackPointer);
     return ProjectionVector;
 }
+
 static inline F2Dot14 *SFVFS(F2Dot14 *FreedomVector, uint32_t *StackPointer)
 
     {
@@ -110,6 +111,14 @@ static inline F2Dot14 *SFVFS(F2Dot14 *FreedomVector, uint32_t *StackPointer)
       FreedomVector[0] = *StackPointer;
       POP(StackPointer);
       return FreedomVector;
+    }
+
+
+static inline void *SFVTPV(F2Dot14 *FreedomVector, F2Dot14 *ProjectionVector)
+
+    {
+      FreedomVector[0] = ProjectionVector[0];
+      FreedomVector[1] = ProjectionVector[1];
     }
 
 
@@ -160,8 +169,8 @@ static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *M
     {
         if(*(MemoryLocations -> StackPointer + 2) - *(MemoryLocations -> StackPointer + 1) > RuntimeStates -> controlvalue_cut_in)
         {
-            ROUND((char) NULL, RuntimeStates -> roundState, *Coordinates);
-            ROUND((char) NULL, RuntimeStates -> roundState, *(Coordinates + 1));
+            ROUND(-127, RuntimeStates -> roundState, *Coordinates);
+            ROUND(-127, RuntimeStates -> roundState, *(Coordinates + 1));
             Coordinates = MoveRelProjFree(Coordinates, RuntimeStates, *MemoryLocations -> StackPointer);
         }
         else

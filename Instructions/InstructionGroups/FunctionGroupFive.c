@@ -114,7 +114,7 @@ static inline uint8_t EQ(uint32_t *StackPointer )
 static inline uint8_t EVENORODD(uint8_t *instructionpointer, uint32_t *StackPointer, uint32_t roundState)
 {
 
-    ROUND((char) NULL, roundState, (F2Dot14) *StackPointer);
+    ROUND(-127, roundState, (F2Dot14) *StackPointer);
     if (*instructionpointer == 56)
     {
         if (*StackPointer & 1 == 1)
