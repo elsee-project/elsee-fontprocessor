@@ -41,7 +41,7 @@ uint16_t searchglyph(uint32_t *character, struct cmap *cmap, struct InstructionK
     return (uint16_t)*EngineInit -> GlyphEntry + EngineInit-> loca->offsets[glyphindex];
 }
 
-uint16_t *cmapformatsetup(char *instructionpointer, struct cmap *cmap)
+uint16_t *cmapformatsetup(uint8_t *instructionpointer, struct cmap *cmap)
 {
     u_int16_t *instance;
     if (*(*cmap).format == 4)
@@ -98,12 +98,12 @@ uint16_t *cmapformatsetup(char *instructionpointer, struct cmap *cmap)
 
 }
 
-struct cmap *cmapsetup(char *instructionpointer, struct FontTable cmapentry)  //only implements for format 10
+struct cmap *cmapsetup(uint8_t *instructionpointer, struct FontTable cmapentry)  //only implements for format 10
 {
     long *Origin;
     uint32_t offset;
 
-    instructionpointer = (char*)Origin + (char)*cmapentry.length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*cmapentry.length;
     struct cmap *instance;
     instance = (struct cmap *) instructionpointer;
     (*instance).version = (uint16_t)*instructionpointer;
@@ -114,7 +114,7 @@ struct cmap *cmapsetup(char *instructionpointer, struct FontTable cmapentry)  //
     (*instance).platformID = (uint16_t)*(instructionpointer + 2);
     (*instance).platformSpecificID = (uint16_t)*(instructionpointer + 3);
     (*instance).offset = (uint32_t)*(instructionpointer + 4);
-    instructionpointer = (char *)&instance->version + (*instance).offset;
+    instructionpointer = (uint8_t *)&instance->version + (*instance).offset;
     (*instance).format = cmapformatsetup(instructionpointer, instance);
     return instance;
  }
@@ -144,10 +144,10 @@ struct glyf *glyfsetup(struct glyf *glyf, struct InstructionKit *FontEngine, uin
     return glyf;
 }
 
-struct maxp *maxpsetup(char *instructionpointer, struct FontTable maxpentry)  //only implements for format 10
+struct maxp *maxpsetup(uint8_t *instructionpointer, struct FontTable maxpentry)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)*(maxpentry).length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*(maxpentry).length;
     struct  maxp *instance;
     (*instance).version = *instructionpointer;
     (*instance).numGlyphs = *(instructionpointer + 2);
@@ -167,10 +167,10 @@ struct maxp *maxpsetup(char *instructionpointer, struct FontTable maxpentry)  //
     return instance;
 }
 
-struct head *headsetup(char *instructionpointer, struct FontTable headentry)  //only implements for format 10
+struct head *headsetup(uint8_t *instructionpointer, struct FontTable headentry)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)*(headentry).length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*(headentry).length;
     struct head *instance;
     (*instance).version = *instructionpointer;
     (*instance).fontRevision = *(instructionpointer + 2);
@@ -192,10 +192,10 @@ struct head *headsetup(char *instructionpointer, struct FontTable headentry)  //
     return instance;
 }
 
-struct hhea *hheasetup(char *instructionpointer, struct FontTable hheaentry)  //only implements for format 10
+struct hhea *hheasetup(uint8_t *instructionpointer, struct FontTable hheaentry)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)*(hheaentry).length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*(hheaentry).length;
     struct hhea *instance;
     (*instance).version = *instructionpointer;
     (*instance).ascent = *(instructionpointer + 2);
@@ -213,10 +213,10 @@ struct hhea *hheasetup(char *instructionpointer, struct FontTable hheaentry)  //
     return instance;
 }
 
-struct hmtx *hmtxsetup(char *instructionpointer, struct FontTable hmtxentry, struct hhea hhea)  //only implements for format 10
+struct hmtx *hmtxsetup(uint8_t *instructionpointer, struct FontTable hmtxentry, struct hhea hhea)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)*(hmtxentry).length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*(hmtxentry).length;
     struct hmtx *instance;
     (*instance).hMetrics = (uint16_t*)calloc(sizeof(uint64_t), hhea.numOfLongHorMetric);
     (*instance).leftSideBearing; //TO-DO Find number of glyphs
@@ -229,22 +229,22 @@ struct loca *locasetup(char *Origin, struct FontTable locaentry)  //only impleme
     return instance;
 }
 
-FWord *cvtsetup(char *instructionpointer, struct FontTable cvtentry)  //only implements for format 10
+FWord *cvtsetup(uint8_t *instructionpointer, struct FontTable cvtentry)  //only implements for format 10
 {   long *Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)(*cvtentry.length);
+    instructionpointer = (uint8_t*)Origin + (uint8_t)(*cvtentry.length);
     FWord *instance = (FWord *)calloc(sizeof(uint32_t), (*cvtentry.length)/4);
     instance = (FWord*)instructionpointer;        //Copies control value table
 return instance;
 }
-uint8_t *prepsetup(char *instructionpointer, struct FontTable prepentry)  //only implements for format 10
+uint8_t *prepsetup(uint8_t *instructionpointer, struct FontTable prepentry)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
     uint8_t *instance = (uint8_t *)calloc(sizeof(uint32_t), *prepentry.length);
     return instance;
 }
 
-uint8_t *fpgmsetup(char*instructionpointer, struct FontTable fpgmentry)
+uint8_t *fpgmsetup(uint8_t*instructionpointer, struct FontTable fpgmentry)
 {
     long Origin;
     uint32_t offset;
@@ -252,10 +252,10 @@ uint8_t *fpgmsetup(char*instructionpointer, struct FontTable fpgmentry)
     return instance;
 }
 
-struct kern *kernsetup(char *instructionpointer, struct FontTable kernentry)  //only implements for format 10
+struct kern *kernsetup(uint8_t *instructionpointer, struct FontTable kernentry)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)*(kernentry).length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*(kernentry).length;
     struct kern *instance;
     (*instance).version = (uint32_t)*instructionpointer;
     (*instance).nTables = (uint32_t)*(instructionpointer + 4);
@@ -265,10 +265,10 @@ struct kern *kernsetup(char *instructionpointer, struct FontTable kernentry)  //
     return instance;
 }
 
-struct post *postsetup(char *instructionpointer, struct FontTable postentry, struct head head)  //only implements for format 10
+struct post *postsetup(uint8_t *instructionpointer, struct FontTable postentry, struct head head)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)*(postentry).length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*(postentry).length;
     struct post *instance;
     (*instance).format = *instructionpointer;
     (*instance).italicAngle = *(instructionpointer + 2);
@@ -283,10 +283,10 @@ struct post *postsetup(char *instructionpointer, struct FontTable postentry, str
 }
 
 
-struct OS_2 *OS_2setup(char *instructionpointer, struct FontTable OS_2entry)  //only implements for format 10
+struct OS_2 *OS_2setup(uint8_t *instructionpointer, struct FontTable OS_2entry)  //only implements for format 10
 {   long Origin;
     uint32_t offset;
-    instructionpointer = (char*)Origin + (char)*(OS_2entry).length;
+    instructionpointer = (uint8_t*)Origin + (uint8_t)*(OS_2entry).length;
     struct OS_2 *instance;
     (*instance).version = (uint16_t)*instructionpointer;
     (*instance).xAvgCharWidth = (int16_t)*(instructionpointer + 2);
@@ -316,7 +316,7 @@ struct OS_2 *OS_2setup(char *instructionpointer, struct FontTable OS_2entry)  //
 extern void instructionentry(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct glyf *glyf);
 
 long *Origin;
-struct InstructionKit *InitializeFontEngine(char *parser, struct FontTable *FontTables, uint32_t dpi, uint32_t PointSize)
+struct InstructionKit *InitializeFontEngine(uint8_t *parser, struct FontTable *FontTables, uint32_t dpi, uint32_t PointSize)
 {
     char *Origin = parser;  //Should point to beginning of the file
     uint32_t characterlist[255];
@@ -343,7 +343,7 @@ struct InstructionKit *InitializeFontEngine(char *parser, struct FontTable *Font
     return EngineTools;
 }
 
-struct OffsetTable SetTable(char *instructionpointer, struct OffsetTable Table)
+struct OffsetTable SetTable(uint8_t *instructionpointer, struct OffsetTable Table)
 {
     Table.scalar_type = (uint32_t)*instructionpointer;
     if (Table.scalar_type == 65336)   //Winodw or Adobe Types
@@ -362,7 +362,7 @@ struct OffsetTable SetTable(char *instructionpointer, struct OffsetTable Table)
     }
 }
 
-static inline struct FontTable loadTable(char *instructionpointer, struct FontTable Table)
+static inline struct FontTable loadTable(uint8_t *instructionpointer, struct FontTable Table)
 {
     uint32_t *tag = (uint32_t*)instructionpointer;     // *Loads the font table to the respect struct
     uint32_t *length = ((uint32_t*)instructionpointer + 1);
@@ -372,12 +372,12 @@ static inline struct FontTable loadTable(char *instructionpointer, struct FontTa
     return Table;
 }
 
-char PointZone(char *instructionpointer, FWord *Zone[255])
+char PointZone(uint8_t *instructionpointer, FWord *Zone[255])
 {
     FWord *ZonePointer = Zone[*instructionpointer];       //The point being manipulated should be referred as the value stored in the array
 }
 
-struct FontTable *FontDirectory(char *instructionpointer)
+struct FontTable *FontDirectory(uint8_t *instructionpointer)
 {
     instructionpointer += 6;   //Since every entry in a Font directory is 6 bytes long, it shall jump head and the following pointers will take their values in respect to this
     long *Origin;
@@ -508,7 +508,7 @@ struct FontTable *FontDirectory(char *instructionpointer)
         LastTable = *dummystruct->length +  *dummystruct->offset  + *Origin;   // It will add the length and address of the last found table; If at the very last table, it should equal to EOL which ends the loop
         free(dummystruct);
         }
-    instructionpointer = (char*)Origin + 15; // This will bring pointer back to pointing at first found element
+    instructionpointer = (uint8_t*)Origin + 15; // This will bring pointer back to pointing at first found element
     return FontTables;
 }
 
