@@ -5,6 +5,61 @@
 #include <stdbool.h>
 #include <math.h>
 
+void *Rasterize(struct InstructionKit *MemoryLocations, struct glyf *glyf, uint8_t *Pixels) /* Should take the completed bitmap outline and appropriately shade the character*/
+{
+    uint8_t *shader:
+    int leftside;
+    int rightside;
+    int endofScan;
+    //Figure out if whether vertical or horizontal has the longest range and assume drawing parallel to the direction that has the longer range will require less time
+    shader = leftside;
+    if ((glyf -> yMax - glyf -> yMin) > (glyf -> xMax - glyf -> xMin))
+    {   
+        leftside = glyf -> yMin;
+        rightside = glyf -> yMax;
+        endofScan = glyf -> xMax;
+    }
+    else if ((glyf -> yMax - glyf -> yMin) <= (glyf -> xMax - glyf -> xMin))
+    {
+        leftside = glyf -> xMin;
+        rightside = glyf -> xMax;
+        endofScan = glyf -> yMax;
+    }
+
+    while (shader != &Pixels[xMax][yMax])
+    {
+        bool IsInterior;
+        if (*shader != 0)   //If is not empty space.
+        {
+            IsInterior = 1;
+        }
+        while (IsInterior == 1)
+        {
+            int *StoppingPoint = Pixels+1;
+            while (*StoppingPoint != 0)
+            {
+            /* Implement specific direction advancement
+            StoppingPoint++;
+            */
+            }
+            while (shader != StoppingPoint)
+            {
+            /* Implement shading and specific direction advancement
+            *shader = 255;
+            shader++;
+            */
+            }
+            IsInterior == 0;
+        }
+        /* Implement specific opposing direction advancement
+        shader++;
+        */
+    }
+}
+
+
+
+
 uint8_t *ScanGlyf(struct InstructionKit *MemoryLocations, struct glyf *glyf, uint16_t scanType)
 {
     uint32_t *point;
@@ -137,7 +192,7 @@ static F2Dot14 DropoutControl(struct InstructionKit *MemoryLocations, struct gly
     int i = 0;
     int j = 0;
     uint8_t *Pixels;
-    Pixels = (uint8_t*)calloc(sizeof(uint8_t), (glyf -> yMax - glyf -> yMin) * (glyf -> xMax - glyf -> xMin));
+    Pixels = (uint8_t*)calloc(sizeof(uint8_t), ((glyf -> yMax) - (glyf -> yMin))*((glyf -> xMax) - (glyf -> xMin));
     while (point [i] != lastpoint)
     {
     F2Dot14 *Bezierlocation = (F2Dot14*)malloc(sizeof(F2Dot14) * ceil(MemoryLocations -> GlyphZone[1][i]  - MemoryLocations -> GlyphZone[1][j]));
