@@ -10,7 +10,6 @@ ${FONTPROCINC}/FontData/FontTableSetup.h
 ${FONTPROCINC}/FontData/TrueFontTypes.h
 Instructions/InstructionGroups/Core.h
 )
-
 add_library(Instructions STATIC Instructions/Instructions.c
 Instructions/InstructionGroups/FunctionGroupZero.c
 Instructions/InstructionGroups/FunctionGroupOne.c
