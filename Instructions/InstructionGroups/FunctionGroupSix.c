@@ -1,7 +1,7 @@
 #include  "Core.h"
 
 
-static inline void ADD(F2Dot14 *StackPointer)
+__attribute__((always_inline)) static inline void ADD(F2Dot14 *StackPointer)
 {
     F2Dot14 *dummy;
     *dummy = *StackPointer;
@@ -11,7 +11,7 @@ static inline void ADD(F2Dot14 *StackPointer)
     dummy = 0;
     *(StackPointer + 1) = 0;
 }
-static inline void SUB(F2Dot14 *StackPointer)
+__attribute__((always_inline)) static inline void SUB(F2Dot14 *StackPointer)
 {
     F2Dot14 *dummy;
     *dummy = *StackPointer;
@@ -23,7 +23,7 @@ static inline void SUB(F2Dot14 *StackPointer)
 }
 
 
-static inline void DIV(F2Dot14 *StackPointer)
+__attribute__((always_inline)) static inline void DIV(F2Dot14 *StackPointer)
 {
     F2Dot14 *dummy;
     *dummy = (F2Dot14)*StackPointer;
@@ -45,13 +45,13 @@ F2Dot14 MUL(F2Dot14 *StackPointer)
     *(StackPointer + 1) = 0;
 }
 
-static inline uint8_t NEG(F2Dot14 *StackPointer)
+__attribute__((always_inline)) static inline uint8_t NEG(F2Dot14 *StackPointer)
 {
     *StackPointer  = -*(StackPointer);
 
 }
 
-static inline void FunctionGroupSix(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline void FunctionGroupSix(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     uint8_t LowEnd  = *instructionpointer & 15;
     F2Dot14 *StackPointer = (F2Dot14 *) MemoryLocations -> StackPointer;

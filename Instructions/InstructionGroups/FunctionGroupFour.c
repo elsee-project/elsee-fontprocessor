@@ -1,7 +1,7 @@
 #include  "Core.h"
 
 
-static inline F2Dot14 MeasureDistance( struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 MeasureDistance( struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {   // TO-DO set to stack pointer
     F2Dot14 PointA[2];
     F2Dot14 PointB[2];
@@ -13,7 +13,7 @@ static inline F2Dot14 MeasureDistance( struct InstructionKit *MemoryLocations, s
     *MemoryLocations -> StackPointer =   Distance(PointA, PointB);
 }
 
-static inline uint32_t WS(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint32_t WS(struct InstructionKit *MemoryLocations)
 {
     uint32_t *dummy;
     MemoryLocations -> StackPointer--;
@@ -22,13 +22,13 @@ static inline uint32_t WS(struct InstructionKit *MemoryLocations)
     POP(MemoryLocations -> StackPointer);
 }
 
-static inline uint32_t RS(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint32_t RS(struct InstructionKit *MemoryLocations)
 {
     MemoryLocations -> Storage[*MemoryLocations -> StackPointer] = *(MemoryLocations -> StackPointer + 1);
     MemoryLocations -> StackPointer++;
 }
 
-static inline F2Dot14 WCVTP(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline F2Dot14 WCVTP(struct InstructionKit *MemoryLocations)
 {
     uint32_t *StackPointer = MemoryLocations -> StackPointer;
     MemoryLocations -> controlvaluetable[*MemoryLocations -> StackPointer - 2] = MemoryLocations -> controlvaluetable[*(MemoryLocations -> StackPointer - 1 )] * (MemoryLocations -> PixelSize);
@@ -36,14 +36,14 @@ static inline F2Dot14 WCVTP(struct InstructionKit *MemoryLocations)
     POP(StackPointer);
 }
 
-static inline uint32_t RCVT(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint32_t RCVT(struct InstructionKit *MemoryLocations)
 {
     uint32_t *storedlocation;                         //Function adds the value the location of the variable to the location beginning of file
     *storedlocation = MemoryLocations -> controlvaluetable[*MemoryLocations -> StackPointer];   //then loads value at that memory; it then replaces the previous location value
     *MemoryLocations -> StackPointer = *storedlocation;
 }
 
-static inline F2Dot14 GC(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 GC(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     F2Dot14 *Coordinates;
     F2Dot14 *ProjectionVector = RuntimeStates -> ProjectionVector;
@@ -63,7 +63,7 @@ static inline F2Dot14 GC(uint8_t *instructionpointer, struct InstructionKit *Mem
     *(MemoryLocations -> StackPointer  + 1) = 0;
 }
 
-static inline F2Dot14 *SCFS(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 *SCFS(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     F2Dot14  *Coordinates;
     Coordinates = Point(MemoryLocations, (*MemoryLocations -> StackPointer - 1), RuntimeStates -> zp[2]);
@@ -75,28 +75,28 @@ static inline F2Dot14 *SCFS(struct InstructionKit *MemoryLocations, struct Graph
     return Coordinates;
 }
 
-static inline F2Dot14 MeasurePixelsPerEM(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline F2Dot14 MeasurePixelsPerEM(struct InstructionKit *MemoryLocations)
 {   // TO-DO set to stack pointer
     MemoryLocations -> StackPointer++;
     *MemoryLocations -> StackPointer  = MemoryLocations -> PixelSize;
 
 }
-static inline F2Dot14 MeasurePointSize(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline F2Dot14 MeasurePointSize(struct InstructionKit *MemoryLocations)
 {   // TO-DO set to stack pointer
     MemoryLocations -> StackPointer++;
     *MemoryLocations -> StackPointer  = MemoryLocations -> PixelSize;
 }
 
-static inline uint8_t FlipOff(uint8_t autoFlip)
+__attribute__((always_inline)) static inline uint8_t FlipOff(uint8_t autoFlip)
 {
         autoFlip = 0;
 }
-static inline uint8_t FlipOn(uint8_t autoFlip)
+__attribute__((always_inline)) static inline uint8_t FlipOn(uint8_t autoFlip)
 {
     autoFlip = 1;
 }
 
-static inline void FunctionGroupFour(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline void FunctionGroupFour(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
 
     uint8_t LowEnd  = *instructionpointer & 15;

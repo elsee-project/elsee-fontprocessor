@@ -1,7 +1,7 @@
 #include  "Core.h"
 
 
-static inline uint32_t IUP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint32_t IUP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
         uint32_t TouchedPointA = 0;
         uint32_t TouchedPointB = 0;
@@ -114,7 +114,7 @@ static inline uint32_t IUP(uint8_t *instructionpointer, struct InstructionKit *M
 
 }
 
-static inline uint32_t IP(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint32_t IP(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {   uint32_t *zp = RuntimeStates -> zp;
         uint32_t *rp = RuntimeStates -> rp;
         F2Dot14 OrigDisRPX = ((MemoryLocations -> OriginalPoints[0][rp[1]]) - (MemoryLocations -> OriginalPoints[0][rp[2]]));
@@ -133,13 +133,13 @@ static inline uint32_t IP(struct InstructionKit *MemoryLocations, struct Graphic
         *(dummy + 1) += (OrigDisP[1] * RelDisRP[1]);
     }
 
-static inline F2Dot14 SHP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 SHP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
       MemoryLocations -> StackPointer  -= 3;
       RuntimeStates -> rp[*MemoryLocations -> StackPointer];
     }
 
-static inline F2Dot14 SHC(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 SHC(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
         if (*instructionpointer % 10 == 3)
         {
@@ -151,7 +151,7 @@ static inline F2Dot14 SHC(uint8_t *instructionpointer, struct InstructionKit *Me
         }
     }
 
- static inline F2Dot14 SHZ(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+ __attribute__((always_inline)) static inline F2Dot14 SHZ(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
         uint32_t point = RuntimeStates ->  rp[1];
         MemoryLocations -> StackPointer -= 3;
@@ -194,7 +194,7 @@ static inline F2Dot14 SHC(uint8_t *instructionpointer, struct InstructionKit *Me
     }
 
 
-static inline F2Dot14 SHPIX(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 SHPIX(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
         F2Dot14 *p1 = Point(MemoryLocations, *MemoryLocations -> StackPointer, RuntimeStates -> zp[2]);
         F2Dot14 *p2 = Point(MemoryLocations, *(MemoryLocations -> StackPointer - 1) , RuntimeStates -> zp[2]);
@@ -212,7 +212,7 @@ static inline F2Dot14 SHPIX(struct InstructionKit *MemoryLocations, struct Graph
         free(p2);
         free(FreedomValues);
     }
-static inline F2Dot14 MSIRP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 MSIRP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
   F2Dot14 distance;
   if (*instructionpointer & 1 == 1)
@@ -222,7 +222,7 @@ static inline F2Dot14 MSIRP(uint8_t *instructionpointer, struct InstructionKit *
   POP(MemoryLocations -> StackPointer);
 }
 
-static inline uint32_t ALIGNRP(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint32_t ALIGNRP(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
         F2Dot14 *Coord1 = Point(MemoryLocations, RuntimeStates -> rp[0], RuntimeStates -> zp[0]);
         F2Dot14 *Coord2 = Point(MemoryLocations, *MemoryLocations -> StackPointer, RuntimeStates -> zp[1]);
@@ -243,13 +243,13 @@ static inline uint32_t ALIGNRP(struct InstructionKit *MemoryLocations, struct Gr
 }
 
 
-static inline uint32_t SRP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations,  struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint32_t SRP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations,  struct GraphicStates *RuntimeStates)
     {
         RuntimeStates -> rp[*MemoryLocations ->StackPointer] = (*instructionpointer - 10);
         POP(MemoryLocations -> StackPointer);
     }
 
-static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
       F2Dot14 *Coordinates;
       Coordinates = Point( MemoryLocations, *(MemoryLocations -> StackPointer + 1), RuntimeStates -> zp[0]);
@@ -277,14 +277,14 @@ static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *M
 
 }
 
-static inline F2Dot14 RTDG(uint32_t roundState)
+__attribute__((always_inline)) static inline F2Dot14 RTDG(uint32_t roundState)
     {
        roundState = 5;
        return roundState;
     }
 
 
-static inline void FunctionGroupThree(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline void FunctionGroupThree(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
 uint8_t LowEnd  = *instructionpointer & 15;
 uint32_t *StackPointer = MemoryLocations -> StackPointer;

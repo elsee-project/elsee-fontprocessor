@@ -1,6 +1,6 @@
 #include  "Core.h"
 
-static inline uint32_t SCANCTRL(uint32_t *StackPointer, struct InstructionKit *MemoryLocations, struct  GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint32_t SCANCTRL(uint32_t *StackPointer, struct InstructionKit *MemoryLocations, struct  GraphicStates *RuntimeStates)
 {
     if(*StackPointer & 8 << 1 == 1)
     {
@@ -56,7 +56,7 @@ static inline uint32_t SCANCTRL(uint32_t *StackPointer, struct InstructionKit *M
     }
 }
 
-static inline uint32_t FLIP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint32_t FLIP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
         uint32_t *StackPointer = MemoryLocations -> StackPointer;
         if ( *instructionpointer == 80)
@@ -109,7 +109,7 @@ return DualProjectionVector;
 }
 
 
-static inline uint32_t ROLL(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint32_t ROLL(uint32_t *StackPointer)
 {
 
     uint32_t *dummy;
@@ -122,7 +122,7 @@ static inline uint32_t ROLL(uint32_t *StackPointer)
     free(dummy);
 }
 
- static inline uint8_t TF_MAX(uint32_t *StackPointer)
+ __attribute__((always_inline)) static inline uint8_t TF_MAX(uint32_t *StackPointer)
 {
 
     uint32_t *dummy = StackPointer ;
@@ -136,7 +136,7 @@ static inline uint32_t ROLL(uint32_t *StackPointer)
     dummy = 0;
 }
 
- static inline uint8_t TF_MIN(uint32_t *StackPointer)
+ __attribute__((always_inline)) static inline uint8_t TF_MIN(uint32_t *StackPointer)
 {
 
     uint32_t *dummy = StackPointer;
@@ -150,7 +150,7 @@ static inline uint32_t ROLL(uint32_t *StackPointer)
     dummy = 0;
 }
 
-static inline uint8_t GETINFO(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint8_t GETINFO(struct InstructionKit *MemoryLocations)
 {
     if (*MemoryLocations -> StackPointer   == 1)
     {
@@ -167,7 +167,7 @@ static inline uint8_t GETINFO(struct InstructionKit *MemoryLocations)
     POP(MemoryLocations -> StackPointer);
 }
 
-static inline uint8_t IDEF(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint8_t IDEF(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
 {
 int i = *MemoryLocations -> StackPointer;  //Stores address of Function defintion
 MemoryLocations -> FunctionDefs[*MemoryLocations -> StackPointer] = (uint16_t)*instructionpointer;
@@ -177,18 +177,18 @@ MemoryLocations -> FunctionDefs[*MemoryLocations -> StackPointer] = (uint16_t)*i
     }
 }
 
-static inline uint32_t INST_CONT(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint32_t INST_CONT(struct InstructionKit *MemoryLocations)
 {
     // move instruction to end of instruction list
 }
 
-static inline uint8_t SCANTYPE(uint32_t *StackPointer, struct  GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint8_t SCANTYPE(uint32_t *StackPointer, struct  GraphicStates *RuntimeStates)
 {
     RuntimeStates -> scanControl = *StackPointer;
     POP(StackPointer);
 }
 
-static inline void FunctionGroupEight(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RunTimeStates )
+__attribute__((always_inline)) static inline void FunctionGroupEight(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RunTimeStates )
 {
     uint32_t *StackPointer = MemoryLocations -> StackPointer;
     uint8_t LowEnd  = *instructionpointer & 15;

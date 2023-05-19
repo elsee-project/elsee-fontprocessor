@@ -1,7 +1,7 @@
 #include  "Core.h"
 
 
-static inline F2Dot14 MDRP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 MDRP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     F2Dot14 *FstPnt = Point(MemoryLocations, *(MemoryLocations -> StackPointer - 1), RuntimeStates-> zp[1]);
     F2Dot14 *SndPnt = Point(MemoryLocations, RuntimeStates-> rp[1], RuntimeStates-> zp[0]);;

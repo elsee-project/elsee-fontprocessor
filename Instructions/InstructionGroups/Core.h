@@ -7,13 +7,13 @@
 
 F2Dot14 Coordinates[2];
 
-static inline void POP(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline void POP(uint32_t *StackPointer)
 {
     *StackPointer = 0;   //Value is discarded
     StackPointer--;
 }
 
-static inline F2Dot14 *Point(struct InstructionKit *MemoryLocations, uint32_t point, uint32_t zp)
+__attribute__((always_inline)) static inline F2Dot14 *Point(struct InstructionKit *MemoryLocations, uint32_t point, uint32_t zp)
 {   
 
     if (zp == 1)
@@ -31,7 +31,7 @@ static inline F2Dot14 *Point(struct InstructionKit *MemoryLocations, uint32_t po
 }
 
 
-static inline F2Dot14 Distance(F2Dot14 CoordinatesA[2], F2Dot14 CoordinatesB[2])
+__attribute__((always_inline)) static inline F2Dot14 Distance(F2Dot14 CoordinatesA[2], F2Dot14 CoordinatesB[2])
 {
     F2Dot14 DisX = CoordinatesA[0] - CoordinatesB[0];
     F2Dot14 DisY = CoordinatesA[1] - CoordinatesB[1];
@@ -40,7 +40,7 @@ static inline F2Dot14 Distance(F2Dot14 CoordinatesA[2], F2Dot14 CoordinatesB[2])
     return distance;
 }
 
-static inline F2Dot14 FreeTransform(F2Dot14 *FreedomVector, F2Dot14 Mag, int index)
+__attribute__((always_inline)) static inline F2Dot14 FreeTransform(F2Dot14 *FreedomVector, F2Dot14 Mag, int index)
 {
     return FreedomVector[index] * Mag;
 }
@@ -49,7 +49,7 @@ static inline F2Dot14 FreeTransform(F2Dot14 *FreedomVector, F2Dot14 Mag, int ind
 //Mutliply  Magnitude of Displacement by x and y
 
 
-static inline F2Dot14 *ProjectionDistance(F2Dot14 ProjectionVector[2], F2Dot14 Coordinates[2])
+__attribute__((always_inline)) static inline F2Dot14 *ProjectionDistance(F2Dot14 ProjectionVector[2], F2Dot14 Coordinates[2])
 {
     F2Dot14 Mag = Distance(Coordinates, 0);
     Coordinates[0] = ProjectionVector[0] * (Coordinates[0])/Mag;
@@ -57,7 +57,7 @@ static inline F2Dot14 *ProjectionDistance(F2Dot14 ProjectionVector[2], F2Dot14 C
     return Coordinates;
 }
 
-static inline F2Dot14 *DualProjectionTransform(F2Dot14 DualProjectionVector[2], F2Dot14 Coordinates[2])
+__attribute__((always_inline)) static inline F2Dot14 *DualProjectionTransform(F2Dot14 DualProjectionVector[2], F2Dot14 Coordinates[2])
 {
     F2Dot14 Mag = Distance(Coordinates, 0);
     Coordinates[0] = DualProjectionVector[0] * Coordinates[0]/Mag;
@@ -65,7 +65,7 @@ static inline F2Dot14 *DualProjectionTransform(F2Dot14 DualProjectionVector[2], 
     return Coordinates;
 }
 
-static inline F2Dot14 *MoveRelProjFree(F2Dot14 Coordinates[2], struct GraphicStates *RuntimeStates, F2Dot14 Arg)
+__attribute__((always_inline)) static inline F2Dot14 *MoveRelProjFree(F2Dot14 Coordinates[2], struct GraphicStates *RuntimeStates, F2Dot14 Arg)
 {
     F2Dot14 *FreedomVector = RuntimeStates -> FreedomVector;
     F2Dot14 Magnitude[2];
@@ -77,18 +77,18 @@ static inline F2Dot14 *MoveRelProjFree(F2Dot14 Coordinates[2], struct GraphicSta
     return Coordinates;
 }
 
-static inline uint8_t ft_abs(F2Dot14 *StackPointer)
+__attribute__((always_inline)) static inline uint8_t ft_abs(F2Dot14 *StackPointer)
 {
     if (*StackPointer  > 0)
         {
             *StackPointer  == -(*StackPointer);
         }
 }
-static inline uint8_t ft_floor(F2Dot14 StackPointer)
+__attribute__((always_inline)) static inline uint8_t ft_floor(F2Dot14 StackPointer)
 {
     floor(StackPointer);
 }
-static inline uint8_t ft_ceil(F2Dot14 StackPointer)
+__attribute__((always_inline)) static inline uint8_t ft_ceil(F2Dot14 StackPointer)
 {
     ceil(StackPointer);
 }

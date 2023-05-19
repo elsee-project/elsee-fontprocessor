@@ -1,6 +1,6 @@
 #include  "Core.h"
 
-static inline uint8_t AND(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t AND(uint32_t *StackPointer)
 {
     uint32_t *dummy;
     *dummy = *StackPointer;
@@ -10,7 +10,7 @@ static inline uint8_t AND(uint32_t *StackPointer)
     POP(StackPointer);
 }
 
- static inline uint8_t LogOR(uint32_t *StackPointer)
+ __attribute__((always_inline)) static inline uint8_t LogOR(uint32_t *StackPointer)
 {
     uint32_t *dummy = StackPointer ;
     *(StackPointer - 1)  = (*(StackPointer - 1) | *dummy);
@@ -19,12 +19,12 @@ static inline uint8_t AND(uint32_t *StackPointer)
     POP(StackPointer);
 }
 
-static inline uint8_t LogNOT(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t LogNOT(uint32_t *StackPointer)
 {
     *StackPointer  = ~(*StackPointer);
 }
 
-static inline uint8_t DELTAP (char *instructionpointer, struct InstructionKit *Memorylocations)
+__attribute__((always_inline)) static inline uint8_t DELTAP (char *instructionpointer, struct InstructionKit *Memorylocations)
 {
 
     uint32_t *dummy = Memorylocations -> StackPointer ;
@@ -61,7 +61,7 @@ uint32_t SDS(uint32_t *StackPointer, struct GraphicStates *RuntimeStates)
         POP(StackPointer);
     }
 
-static inline uint8_t LTEQ(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t LTEQ(uint32_t *StackPointer)
 {
     uint32_t *dummy = StackPointer;
     *StackPointer  = (*StackPointer  <= *dummy);
@@ -69,7 +69,7 @@ static inline uint8_t LTEQ(uint32_t *StackPointer)
     dummy = 0;
 }
 
-static inline uint8_t LT(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t LT(uint32_t *StackPointer)
 {
     uint32_t *dummy = StackPointer;
     *StackPointer  = (*StackPointer  < *dummy);
@@ -77,14 +77,14 @@ static inline uint8_t LT(uint32_t *StackPointer)
     dummy = 0;
 }
 
-static inline uint8_t GTEQ(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t GTEQ(uint32_t *StackPointer)
 {
     uint32_t *dummy = StackPointer ;
     *StackPointer  = (*StackPointer  >=*dummy);
     free(dummy);
     dummy = 0;
 }
-static inline uint8_t GT(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t GT(uint32_t *StackPointer)
 {
     uint32_t *dummy = StackPointer ;
     *StackPointer  = (*StackPointer  > *dummy);
@@ -92,7 +92,7 @@ static inline uint8_t GT(uint32_t *StackPointer)
     dummy = 0;
 }
 
-static inline uint8_t NOTEQ(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t NOTEQ(uint32_t *StackPointer)
 {
     uint32_t *dummy;
     *dummy = *StackPointer;
@@ -102,7 +102,7 @@ static inline uint8_t NOTEQ(uint32_t *StackPointer)
     dummy = 0;
 
 }
-static inline uint8_t EQ(uint32_t *StackPointer )
+__attribute__((always_inline)) static inline uint8_t EQ(uint32_t *StackPointer )
 {
     uint32_t *dummy;
     *dummy = *StackPointer;
@@ -111,7 +111,7 @@ static inline uint8_t EQ(uint32_t *StackPointer )
     dummy = 0;
 }
 
-static inline uint8_t EVENORODD(uint8_t *instructionpointer, uint32_t *StackPointer, uint32_t roundState)
+__attribute__((always_inline)) static inline uint8_t EVENORODD(uint8_t *instructionpointer, uint32_t *StackPointer, uint32_t roundState)
 {
 
     ROUND(-127, roundState, (F2Dot14) *StackPointer);
@@ -141,7 +141,7 @@ static inline uint8_t EVENORODD(uint8_t *instructionpointer, uint32_t *StackPoin
 }
 
 
-static inline uint8_t IF(uint8_t *instructionpointer, uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t IF(uint8_t *instructionpointer, uint32_t *StackPointer)
 {
 
 
@@ -164,7 +164,7 @@ static inline uint8_t IF(uint8_t *instructionpointer, uint32_t *StackPointer)
 }
     //uint16_t EIF  = 89;
     uint16_t DELTAP1   = 93;
-static inline void FunctionGroupFive(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline void FunctionGroupFive(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     uint32_t *StackPointer = MemoryLocations -> StackPointer;
     uint8_t LowEnd  = *instructionpointer & 15;

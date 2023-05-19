@@ -1,7 +1,7 @@
 #include  "Core.h"
 
 
-static inline F2Dot14 WCVTF(struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline F2Dot14 WCVTF(struct InstructionKit *MemoryLocations)
 {
     MemoryLocations -> StackPointer -= 2;
     MemoryLocations -> controlvaluetable[*MemoryLocations -> StackPointer] = MemoryLocations -> controlvaluetable[*(MemoryLocations -> StackPointer + 1)];
@@ -10,7 +10,7 @@ static inline F2Dot14 WCVTF(struct InstructionKit *MemoryLocations)
 }
 
 
-static inline uint8_t DELTAP (uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint8_t DELTAP (uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     uint32_t *dummy = MemoryLocations -> StackPointer ;
     uint8_t mostsig;
@@ -35,7 +35,7 @@ static inline uint8_t DELTAP (uint8_t *instructionpointer, struct InstructionKit
 }
 
 
-static inline uint8_t DELTAC (uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint8_t DELTAC (uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     uint32_t *dummy = MemoryLocations -> StackPointer ;
     uint8_t mostsig;
@@ -69,7 +69,7 @@ uint32_t S45ROUND (uint32_t *StackPointer, uint8_t *SuperBool)
     //Rounded to a value added with (float)(value/period)
 }
 
-static inline uint8_t JumpFalse(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint8_t JumpFalse(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
 {
     if(*MemoryLocations -> StackPointer  == 0)
     {
@@ -77,7 +77,7 @@ static inline uint8_t JumpFalse(uint8_t *instructionpointer, struct InstructionK
         MemoryLocations -> StackPointer--;
     }
 }
-static inline uint8_t JumpTrue(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint8_t JumpTrue(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
 {
     if(*MemoryLocations -> StackPointer  == 1)
     {
@@ -86,25 +86,25 @@ static inline uint8_t JumpTrue(uint8_t *instructionpointer, struct InstructionKi
     }
 }
 
-static inline uint32_t ROFF(uint32_t roundState)
+__attribute__((always_inline)) static inline uint32_t ROFF(uint32_t roundState)
 {
     roundState = 0;
     return roundState;
 }
 
-static inline uint32_t RUTG(uint32_t roundState)
+__attribute__((always_inline)) static inline uint32_t RUTG(uint32_t roundState)
 {
     roundState = 4;
     return roundState;
 }
 
-static inline uint32_t RDTG(uint32_t roundState)
+__attribute__((always_inline)) static inline uint32_t RDTG(uint32_t roundState)
 {
     roundState = 1;
     return roundState;
 }
 
-static inline void FunctionGroupSeven(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline void FunctionGroupSeven(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
 uint8_t LowEnd  = *instructionpointer & 15;
 uint32_t *StackPointer = MemoryLocations -> StackPointer;

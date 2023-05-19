@@ -2,13 +2,13 @@
 
 extern void InstructionExecute(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates);
 
-static inline uint8_t  DUP(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t  DUP(uint32_t *StackPointer)
 {
 *(StackPointer  + 1) = *StackPointer;
 }
 
 
-static inline uint32_t CLEAR(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint32_t CLEAR(uint32_t *StackPointer)
 {
     uint32_t *dummy = StackPointer;
 
@@ -20,7 +20,7 @@ static inline uint32_t CLEAR(uint32_t *StackPointer)
     dummy = 0;
 }
 
-static inline uint8_t SWAP(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint8_t SWAP(uint32_t *StackPointer)
 {
     uint32_t *dummy = StackPointer;
     StackPointer--;
@@ -31,13 +31,13 @@ static inline uint8_t SWAP(uint32_t *StackPointer)
     dummy = 0;
 }
 
-static inline uint8_t DEPTH(uint32_t *StackPointer, uint32_t *Stack)
+__attribute__((always_inline)) static inline uint8_t DEPTH(uint32_t *StackPointer, uint32_t *Stack)
 {
     StackPointer++;
     *StackPointer = StackPointer - Stack;
 }
 
-static inline F2Dot14 ALIGNPTS(uint32_t *StackPointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 ALIGNPTS(uint32_t *StackPointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
     {
 
         F2Dot14 *Coord1 = Point(MemoryLocations, *StackPointer, RuntimeStates -> zp[2]);
@@ -58,7 +58,7 @@ static inline F2Dot14 ALIGNPTS(uint32_t *StackPointer, struct InstructionKit *Me
          POP(StackPointer);
     }
 
-static inline uint32_t NPUSH(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint32_t NPUSH(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
 {   uint8_t *dummy;
     *dummy = *(instructionpointer + 1);
     if (*instructionpointer = 41)
@@ -78,18 +78,18 @@ static inline uint32_t NPUSH(uint8_t *instructionpointer, struct InstructionKit 
          }
         }
 }
-static inline uint32_t CINDEX(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint32_t CINDEX(uint32_t *StackPointer)
 {   uint32_t dummy;
     *StackPointer = *(StackPointer - *StackPointer);  // Loads value at location of the top of stack minus the value stored and replaces the l-value with the stored value
 }
 
-static inline uint32_t MINDEX(uint32_t *StackPointer)
+__attribute__((always_inline)) static inline uint32_t MINDEX(uint32_t *StackPointer)
 {
     *StackPointer  = *(StackPointer  - *StackPointer );
     *(StackPointer  - *StackPointer) = 0;
 }
 
-static inline uint8_t FDEF(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
+__attribute__((always_inline)) static inline uint8_t FDEF(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations)
 {
   //Stores address of Function defintion
     MemoryLocations -> FunctionDefs[*MemoryLocations -> StackPointer] = (uint16_t)*instructionpointer;
@@ -100,7 +100,7 @@ static inline uint8_t FDEF(uint8_t *instructionpointer, struct InstructionKit *M
 
     }
 }
-static inline uint32_t UntouchPoint(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline uint32_t UntouchPoint(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 
 {   F2Dot14 *FreedomVector = RuntimeStates -> FreedomVector;
 
@@ -146,7 +146,7 @@ uint8_t LOOPCALL(uint8_t *instructionpointer, struct InstructionKit *MemoryLocat
         }
 }
 
-static inline F2Dot14 MDAP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 MDAP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     if (*instructionpointer == 45)
     {
@@ -164,7 +164,7 @@ static inline F2Dot14 MDAP(uint8_t *instructionpointer, struct InstructionKit *M
     }
 }
 
-static inline void FunctionGroupTwo(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline void FunctionGroupTwo(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
 uint32_t *StackPointer = MemoryLocations -> StackPointer;
 uint8_t LowEnd  = *instructionpointer & 15;

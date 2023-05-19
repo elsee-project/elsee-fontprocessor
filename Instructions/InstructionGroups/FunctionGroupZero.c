@@ -5,7 +5,7 @@
 
 F2Dot14 Coordinates[2];
 
-static inline F2Dot14 SVTCA(uint8_t *instructionpointer,  F2Dot14 *FreedomVector,   F2Dot14 *ProjectionVector)
+__attribute__((always_inline)) static inline F2Dot14 SVTCA(uint8_t *instructionpointer,  F2Dot14 *FreedomVector,   F2Dot14 *ProjectionVector)
 {
   if (*instructionpointer == 0)
   {
@@ -21,7 +21,7 @@ static inline F2Dot14 SVTCA(uint8_t *instructionpointer,  F2Dot14 *FreedomVector
   FreedomVector[1] = ProjectionVector[1];
 
 }
-static inline F2Dot14 *SVFTCA(uint8_t *instructionpointer, F2Dot14 *FreedomVector)
+__attribute__((always_inline)) static inline F2Dot14 *SVFTCA(uint8_t *instructionpointer, F2Dot14 *FreedomVector)
     {
        if (*instructionpointer == 0)
        {
@@ -36,7 +36,7 @@ static inline F2Dot14 *SVFTCA(uint8_t *instructionpointer, F2Dot14 *FreedomVecto
        return FreedomVector;
     }
 
-static inline F2Dot14 *SVPTCA(uint8_t *instructionpointer, F2Dot14 *ProjectionVector)
+__attribute__((always_inline)) static inline F2Dot14 *SVPTCA(uint8_t *instructionpointer, F2Dot14 *ProjectionVector)
     {
        if (*instructionpointer == 0)
        {
@@ -51,7 +51,7 @@ static inline F2Dot14 *SVPTCA(uint8_t *instructionpointer, F2Dot14 *ProjectionVe
        return ProjectionVector;
     }
 
-static inline F2Dot14 SPVTL(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations , struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 SPVTL(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations , struct GraphicStates *RuntimeStates)
 {
     F2Dot14 *PointA;
     PointA = Point(MemoryLocations, *MemoryLocations -> StackPointer, RuntimeStates -> zp[1]);
@@ -73,7 +73,7 @@ static inline F2Dot14 SPVTL(uint8_t *instructionpointer, struct InstructionKit *
         RuntimeStates -> ProjectionVector[1] = 0;
 }
 
-static inline F2Dot14 *SFVTL(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations , struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 *SFVTL(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations , struct GraphicStates *RuntimeStates)
     {
      F2Dot14 *PointA = Point(MemoryLocations, *MemoryLocations -> StackPointer, RuntimeStates -> zp[1]);
        POP(MemoryLocations -> StackPointer);
@@ -93,7 +93,7 @@ static inline F2Dot14 *SFVTL(uint8_t *instructionpointer, struct InstructionKit 
     }
 
 
-static inline F2Dot14 *SPVFS(F2Dot14 *ProjectionVector, uint32_t *StackPointer)
+__attribute__((always_inline)) static inline F2Dot14 *SPVFS(F2Dot14 *ProjectionVector, uint32_t *StackPointer)
 {
     ProjectionVector[2] = *StackPointer;
     POP(StackPointer);
@@ -102,7 +102,7 @@ static inline F2Dot14 *SPVFS(F2Dot14 *ProjectionVector, uint32_t *StackPointer)
     return ProjectionVector;
 }
 
-static inline F2Dot14 *SFVFS(F2Dot14 *FreedomVector, uint32_t *StackPointer)
+__attribute__((always_inline)) static inline F2Dot14 *SFVFS(F2Dot14 *FreedomVector, uint32_t *StackPointer)
 
     {
 
@@ -114,7 +114,7 @@ static inline F2Dot14 *SFVFS(F2Dot14 *FreedomVector, uint32_t *StackPointer)
     }
 
 
-static inline void *SFVTPV(F2Dot14 *FreedomVector, F2Dot14 *ProjectionVector)
+__attribute__((always_inline)) static inline void *SFVTPV(F2Dot14 *FreedomVector, F2Dot14 *ProjectionVector)
 
     {
       FreedomVector[0] = ProjectionVector[0];
@@ -123,7 +123,7 @@ static inline void *SFVTPV(F2Dot14 *FreedomVector, F2Dot14 *ProjectionVector)
 
 
 
-static inline void GPV(F2Dot14 *ProjectionVector, uint32_t *StackPointer)
+__attribute__((always_inline)) static inline void GPV(F2Dot14 *ProjectionVector, uint32_t *StackPointer)
 {
     StackPointer++;
     *StackPointer = ProjectionVector[0];
@@ -131,7 +131,7 @@ static inline void GPV(F2Dot14 *ProjectionVector, uint32_t *StackPointer)
     *StackPointer = ProjectionVector[1];
 }
 
-static inline void GFV(F2Dot14 *FreedomVector, uint32_t *StackPointer)
+__attribute__((always_inline)) static inline void GFV(F2Dot14 *FreedomVector, uint32_t *StackPointer)
 {
     StackPointer++;
     *StackPointer = FreedomVector[0];
@@ -139,7 +139,7 @@ static inline void GFV(F2Dot14 *FreedomVector, uint32_t *StackPointer)
     *StackPointer = FreedomVector[1];
 }
 
-static inline F2Dot14 ISECT(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 ISECT(struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     MemoryLocations -> StackPointer -= 5;
     F2Dot14 MidPointA = (Point(MemoryLocations, *(MemoryLocations ->StackPointer + 4), RuntimeStates -> zp[0]))  - Point(MemoryLocations, *(MemoryLocations ->StackPointer + 3), RuntimeStates -> zp[0]);
@@ -159,7 +159,7 @@ static inline F2Dot14 ISECT(struct InstructionKit *MemoryLocations, struct Graph
 
 
 
-static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
     F2Dot14 *Coordinates;
     Coordinates = Point(MemoryLocations, *(MemoryLocations -> StackPointer + 1), RuntimeStates -> zp[0]);
@@ -185,7 +185,7 @@ static inline F2Dot14 MIAP(uint8_t *instructionpointer, struct InstructionKit *M
     }
 }
 
-static inline void FunctionGroupZero(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
+__attribute__((always_inline)) static inline void FunctionGroupZero(uint8_t *instructionpointer , struct InstructionKit *MemoryLocations, struct GraphicStates *RuntimeStates)
 {
 F2Dot14 *FreedomVector =  RuntimeStates -> FreedomVector;
 F2Dot14 *ProjectionVector =  RuntimeStates -> ProjectionVector;
